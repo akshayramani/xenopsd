@@ -16,6 +16,7 @@ open Xenops_interface
 open Xenops_server_plugin
 open Xenops_utils
 open Xenops_task
+open Stringext
 
 module D = Debug.Make(struct let name = "xenops_server" end)
 open D
@@ -1738,7 +1739,7 @@ module VM = struct
 		end else
 			Some (queue_operation dbg id op)
 
-	let path_separator = Re_str.regexp_string "/"
+	let path_separator = '/'
 
 	let receive_memory uri cookies s context : unit =
 		let module Request = Cohttp.Request.Make(Cohttp_posix_io.Unbuffered_IO) in
@@ -1752,7 +1753,7 @@ module VM = struct
 				let remote_instance = List.assoc "instance_id" cookies in
 				let is_localhost = instance_id = remote_instance in
 				(* The URI is /service/xenops/memory/id *)
-				let bits = Re_str.split_delim path_separator (Uri.path uri) in
+				let bits = String.split path_separator (Uri.path uri) in
 				let id = bits |> List.rev |> List.hd in
 				debug "VM.receive_memory id = %s is_localhost = %b" id is_localhost;
 				is_localhost, id

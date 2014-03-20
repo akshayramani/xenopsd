@@ -14,6 +14,7 @@
 open Printf
 open Xenstore
 open Xenops_utils
+open Stringext
 
 type kind = Vif | Vbd | Tap | Pci | Vfs | Vfb | Vkbd | Qdisk
 with rpc
@@ -140,10 +141,10 @@ let parse_int i =
 		Some (int_of_string i)
 	with _ -> None
 
-let slash = Re_str.regexp_string "/"
+let slash = '/'
 
 let parse_frontend_link x =
-	match Re_str.split slash x with
+	match String.split slash x with
 		| [ "local"; "domain"; domid; "device"; kind; devid ] ->
 			begin
 				match parse_int domid, parse_kind kind, parse_int devid with
@@ -154,7 +155,7 @@ let parse_frontend_link x =
 		| _ -> None
 
 let parse_backend_link x = 
-	match Re_str.split slash x with
+	match String.split slash x with
 		| [ "local"; "domain"; domid; "backend"; kind; _; devid ] ->
 			begin
 				match parse_int domid, parse_kind kind, parse_int devid with

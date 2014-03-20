@@ -22,6 +22,7 @@
 open String
 open Xenops_utils
 open Xenops_task
+open Stringext
 
 module D=Debug.Make(struct let name="bootloader" end)
 open D
@@ -59,7 +60,7 @@ type t = {
 let command bootloader q pv_bootloader_args image vm_uuid = 
   (* Let's not do anything fancy while parsing the pv_bootloader_args string:
      no escaping of spaces or quotes for now *)
-  let pv_bootloader_args = if pv_bootloader_args = "" then [] else Re_str.split (Re_str.regexp "[ ]") pv_bootloader_args in
+  let pv_bootloader_args = if pv_bootloader_args = "" then [] else String.split ' ' pv_bootloader_args in
   let q = if q then [ "-q" ] else [] in
   let vm = [ "--vm"; vm_uuid ] in
   let image = [ image ] in

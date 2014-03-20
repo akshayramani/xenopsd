@@ -13,6 +13,7 @@
  *)
 
 open Xenops_interface
+open Stringext
 
 let ( |> ) a b = b a
 
@@ -586,7 +587,7 @@ let get_network_backend () =
 	try
 		Unixext.string_of_file !Path.network_conf
 	|>  strip
-	|>  Re_str.split (Re_str.regexp " ")
+	|>  String.split ' '
 	|>  List.hd
 	with _ ->
 		failwith (Printf.sprintf "Failed to read network backend from: %s" !Path.network_conf)

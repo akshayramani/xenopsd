@@ -15,6 +15,7 @@
 open Xenops_interface
 open Xenops_task
 open Xenops_utils
+open Stringext
 
 module D = Debug.Make(struct let name = service_name end)
 open D
@@ -85,7 +86,7 @@ let dp_destroy task dp =
 	))
 
 let get_disk_by_name task path =
-	match Re_str.bounded_split (Re_str.regexp_string "/") path 2 with
+	match String.split '/' ~limit:2 path with
 		| [ sr; vdi ] ->
 			info "Processing disk SR=%s VDI=%s" sr vdi;
 			sr, vdi
